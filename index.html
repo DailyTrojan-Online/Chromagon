@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Trojan Games - Chromagon</title>
+    <link rel="icon" href="./imgs/hex.png" type="image/x-icon">
+    <link rel="stylesheet" href="./dailytrojan-lib/gameStyles.css">
+    <link rel="stylesheet" href="./styles/styles.css">
+    <script src="./dailytrojan-lib/gameCore.js" defer></script>
+    <script src="./scripts/maps.js" defer></script>
+    <script src="./scripts/chroma.min.js" defer></script>
+    <script src="./scripts/main.js" defer></script>
+    <link rel="stylesheet" href="./dailytrojan-lib/icons/tabler-icons.css">
+    <link rel="stylesheet" href="./dailytrojan-lib/fonts/fonts.css">
+
+</head>
+
+<body>
+
+    <header>
+        <img id="dt-logo" src="./imgs/dt-logo.png" height="50" width=auto style="cursor: pointer;"
+            onclick="homeRedirect()" alt="Daily Trojan Logo" />
+    </header>
+    <div class="game-splash-wrapper game-splash-hidden" id="splash">
+        <img width="80" src="./imgs/hex.svg" />
+        <h1>Chromagon</h1>
+        <h2 id="game-tagline">Find as many words as you can, as fast as you can</h2>
+        <div class="flex-hor">
+            <button onclick="DTGCore.homeRedirect()" id="game-back-button">Back</button>
+            <button onclick="startGame()" id="game-action-button">Play</button>
+        </div>
+        <p id="splash-date">date</p>
+    </div>
+    <main>
+        <div class="game-wrapper">
+            <h1>Chromagon</h1>
+            <div class="game-stats">
+                <div class="turns">Turns: <span id="turns-text"></span></div>
+                <div class="elapsed"><span id="elapsed-text">00:00</span><i class="ti ti-hourglass"></i></div>
+            </div>
+            <div class="game-boards">
+                <svg id="game-board" width="400" height="400" viewBox="-200 -200 400 400"></svg>
+                <div class="solution hidden" id="solution">
+                    <svg id="solution-board" width="400" height="400" viewBox="-200 -200 400 400"></svg>
+                </div>
+            </div>
+            <div class="flex-hor">
+                <button onclick="regenerateMap()">Regenerate</button>
+                <button onclick="toggleSolution()">Show Solution</button>
+            </div>
+        </div>
+    </main>
+
+</body>
+
+</html>
