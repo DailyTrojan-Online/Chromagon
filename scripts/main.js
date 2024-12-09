@@ -10,10 +10,16 @@ let chosenMap;
 let origin;
 let fixedPositions = [];
 
-let difficultiesByDay = [
-    {map: smallMap, shuffle: 5, minDistance: 20},
-    {map: smallMap, shuffle: 10, minDistance: 20},
+let today;
 
+let difficultiesByDay = [
+    {map: smallMap, shuffle: 5, minDistance: 80, maxDistance: Infinity, difficulty: 1},
+    {map: smallMap, shuffle: 8, minDistance: 40, maxDistance: 60, difficulty: 2},
+    {map: leaningMap, shuffle: 10, minDistance: 60, maxDistance: Infinity, difficulty: 2},
+    {map: leaningMap, shuffle: 12, minDistance: 40, maxDistance: 50, difficulty: 3},
+    {map: tallMap, shuffle: 14, minDistance: 50, maxDistance: 80, difficulty: 4},
+    {map: tallMap, shuffle: 16, minDistance: 30, maxDistance: 50, difficulty: 4},
+    {map: giantMap, shuffle: 16, minDistance: 20, maxDistance: 40, difficulty: 5},
 ]
 
 let correctMap = [];
@@ -25,8 +31,28 @@ function initialize() {
 	gameSplash = document.getElementById("splash");
 	splashDate = document.getElementById("splash-date");
 	window.DTGCore = new DTGameCore(gameSplash, splashDate);
+	let dayOfWeek = new Date().getDay();
+	dayOfWeek--;
+	if(dayOfWeek < 0) {
+		dayOfWeek = 6;
+	}
+	today = difficultiesByDay[dayOfWeek];
+	console.log(today);
 
-	createHexLayoutWithMap(tallMap);
+	let difficultyWrapper = document.getElementById("game-difficulty");
+
+	for(let i = 0; i < 5; i++) {
+		let difficulty = document.createElement("i");
+		difficulty.classList.add("ti");
+		if(i < today.difficulty) {
+			difficulty.classList.add("ti-star-filled");
+		}else {
+			difficulty.classList.add("ti-star");
+		}
+		difficultyWrapper.appendChild(difficulty);
+	}
+
+	createHexLayoutWithMap(today.map);
     shuffleMap();
     gameBoardSvg.classList.add("transition")
 }
@@ -131,7 +157,7 @@ function createHexLayoutWithMap(map) {
 		}
 		let hexEl = createHexAtPoint(x, y, color, fixed, rotator);
         if(rotator) {
-            hexEl.element.addEventListener("click", () => {
+            hexEl.hitbox.addEventListener("click", () => {
                 rotateAroundHex(x + originX, y + originY);
             });
             hexEl.group.classList.add("rotator");
@@ -215,6 +241,8 @@ function createHexAtPoint(x, y, color, fixed, rotator) {
         gameBoardSvg.appendChild(circle);
     }
 
+	let hitbox;
+
     if(rotator) {
         let icon = document.createElementNS("http://www.w3.org/2000/svg", "path");
         icon.setAttribute("d", "M 25 0 l -12.5 21.651 H -12.5 L -25 0 L -12.5 -21.651 h 25 l 12.5 21.651 Z M -10.009 4.445 c 1.705 3.832 5.545 6.503 10.009 6.503 c 5.596 0 10.212 -4.199 10.869 -9.618 M -5.239 3.993 h -5.71 s 0 5.596 0 5.596 M 10.009 -4.446 c -1.705 -3.832 -5.545 -6.503 -10.009 -6.503 c -5.596 0 -10.212 4.199 -10.869 9.618 M 5.239 -3.994 h 5.71 s 0 -5.596 0 -5.596");
@@ -226,10 +254,20 @@ function createHexAtPoint(x, y, color, fixed, rotator) {
         icon.style.pointerEvents = "none";
         icon.setAttribute("transform", `translate(${(x * hexRadius * 3) / 2},${y * Math.sqrt(3) * hexRadius})`);
         group.appendChild(icon);
+		hex.classList.add("rotator-hex");
+
+		hitbox = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+		hitbox.setAttribute("cx", (x * hexRadius * 3) / 2);
+		hitbox.setAttribute("cy", y * Math.sqrt(3) * hexRadius);
+		hitbox.setAttribute("r", 40);
+		hitbox.setAttribute("fill", "transparent");
+		hitbox.style.cursor = "pointer";
+		hitbox.classList.add("rotator-hitbox");
+		group.appendChild(hitbox);
 
     }
 
-    return {element: hex,group, transformedPositionX, transformedPositionY};
+    return {element: hex,group, hitbox, transformedPositionX, transformedPositionY};
 }
 function counterRotateAroundHex(x, y) {
     for(let i = 0; i < 5; i++) {
@@ -286,8 +324,7 @@ function rotateAroundHex(x, y) {
 }
 
 function shuffleMap() {
-    let randomChoices = DTGCore.randomInt(1, 5);
-    for(let i = 0; i < randomChoices; i++) {
+    for(let i = 0; i < today.shuffle; i++) {
         let randomIndex = DTGCore.randomInt(0, fixedPositions.length - 1);
         counterRotateAroundHex(fixedPositions[randomIndex].x, fixedPositions[randomIndex].y);
 
@@ -315,6 +352,7 @@ function toggleSolution() {
 function generateColors(numColors) {
 	const colors = [];
 	const attempts = 100; // Limit attempts to find distinct colors
+	let dist = [];
 
 	for (let i = 0; i < numColors; i++) {
 		let color;
@@ -329,7 +367,13 @@ function generateColors(numColors) {
 
 			// Ensure the color is distinguishable from others
 			const isDistinct = colors.every(
-				(existingColor) => chroma.distance(color, existingColor, "lab") > 40
+				(existingColor) => {
+					let distance = chroma.distance(color, existingColor, "lab");
+					let valid = distance > today.minDistance && distance < today.maxDistance;
+					if(valid){
+						dist.push(distance);
+					}
+					return distance > today.minDistance && distance < today.maxDistance;}
 			);
 
 			if (isDistinct) {
@@ -340,6 +384,10 @@ function generateColors(numColors) {
 
 		colors.push(color);
 	}
+	//log average distance
+	const sum = dist.reduce((a, b) => a + b, 0);
+	const avg = sum / dist.length || 0;
+	console.log(avg);
 
 	// Convert all colors to hex format for consistency
 	return colors.map((c) => c.hex());

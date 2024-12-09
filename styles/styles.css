@@ -1,5 +1,30 @@
+
+svg {
+    width: 80vw;
+    max-width: 400px;
+    height: 80vw;
+    max-height: 400px;
+}
 svg.transition * {
     transition: transform 0.3s;
+}
+svg * {
+    pointer-events: none;
+}
+svg *.rotator, svg *.rotator-hex, svg *.rotator-hitbox {
+    pointer-events: all !important;
+}
+.difficulty {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    gap: 10px;
+}
+#game-difficulty {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2px;
 }
 .game-boards {
     position: relative;
@@ -7,6 +32,7 @@ svg.transition * {
     justify-content: center;
     align-items: center;
     margin-bottom: 20px;
+    height: fit-content;
 }
 .solution {
     position: absolute;
@@ -41,6 +67,9 @@ svg.transition * {
     box-sizing: border-box;
 }
 
+.game-splash-wrapper {
+    background: #d9dbdb;
+}
 
 .solution.hidden {
     opacity: 0;;

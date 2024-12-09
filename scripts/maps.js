@@ -429,3 +429,112 @@ let tallMap = [
 	{ x: 2, y: 6, fixed: true },
 	{ x: 3, y: 6},
 ];
+
+let leaningMap = [
+	{
+		origin: { x: 1.5, y: 3 },
+		assignmentSteps: [
+			{
+				anchors: [
+					{ x: 0, y: 0},
+					{ x: 3, y: 2 },
+				],
+				intermediate: [
+					{ x: 1, y: 1 },
+					{ x: 2, y: 1 },
+				],
+				mode: "scale",
+			},
+			{
+				anchors: [
+					{ x: 0, y: 0},
+					{ x: 0, y: 3},
+				],
+				intermediate: [
+					{ x: 0, y: 1 },
+					{ x: 0, y: 2 },
+				],
+				mode: "scale",
+			},
+			{
+				anchors: [
+					{ x: 0, y: 3},
+					{ x: 0, y: 6},
+				],
+				intermediate: [
+					{ x: 0, y: 4 },
+					{ x: 0, y: 5 },
+				],
+				mode: "scale",
+			},
+			{
+				anchors: [
+					{ x: 3, y: 2},
+					{ x: 3, y: 5},
+				],
+				intermediate: [
+					{ x: 3, y: 3 },
+					{ x: 3, y: 4 },
+				],
+				mode: "scale",
+			},
+			{
+				anchors: [
+					{ x: 0, y: 6},
+					{ x: 3, y: 5},
+				],
+				intermediate: [
+					{ x: 1, y: 6 },
+					{ x: 2, y: 5 },
+				],
+				mode: "scale",
+			},
+			{
+				anchors: [
+					{ x: 0, y: 4},
+					{ x: 3, y: 5},
+				],
+				intermediate: [
+					{ x: 1, y: 4 },
+					{ x: 2, y: 4 },
+				],
+				mode: "scale",
+			},
+			{
+				anchors: [
+					{ x: 0, y: 4},
+					{ x: 3, y: 2},
+				],
+				intermediate: [
+					{ x: 1, y: 3 },
+					{ x: 2, y: 2 },
+				],
+				mode: "scale",
+			},
+		]
+
+	},
+	{x: 0, y: 0, fixed: true},
+	{x: 0, y:1},
+	{x: 1, y:1},
+	{x: 2, y:1},
+	{x: 0, y:2},
+	{x: 1, y:2, rotator: true},
+	{x: 2, y:2},
+	{x: 3, y:2, fixed: true},
+	{x: 0, y:3, fixed: true},
+	{x: 1, y:3},
+	{x: 2, y:3, rotator: true},
+	{x: 3, y:3},
+	{x: 0, y:4},
+	{x: 1, y:4},
+	{x: 2, y:4},
+	{x: 3, y:4},
+	{x: 0, y:5},
+	{x: 1, y:5, rotator: true},
+	{x: 2, y:5},
+	{x: 3, y:5, fixed: true},
+	{x: 0, y:6, fixed: true},
+	{x: 1, y:6},
+
+]
